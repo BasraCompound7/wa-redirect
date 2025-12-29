@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بصرة كومباوند | تواصل معنا</title>
+
+<style>
+body{
+  margin:0;
+  font-family: "Tahoma", Arial;
+  background: linear-gradient(135deg,#f7f5f0,#ffffff);
+  color:#333;
+}
+.container{
+  max-width:420px;
+  margin:60px auto;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  padding:30px;
+  text-align:center;
+}
+.logo{
+  font-size:28px;
+  font-weight:bold;
+  color:#b89b5e;
+  margin-bottom:10px;
+}
+.subtitle{
+  font-size:15px;
+  color:#666;
+  margin-bottom:25px;
+}
+.btn{
+  display:block;
+  width:100%;
+  padding:15px;
+  font-size:18px;
+  background:#25D366;
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  text-decoration:none;
+  margin-top:20px;
+  cursor:pointer;
+}
+.footer{
+  margin-top:30px;
+  font-size:12px;
+  color:#aaa;
+}
+</style>
+
+<script>
+const numbers = [
+  "9647845555222",
+  "9647865555222",
+  "9647855433315",
+  "9647777082194",
+  "9647777081067"
+];
+
+let index = localStorage.getItem("basra_compound_rr") || 0;
+index = parseInt(index);
+
+const selectedNumber = numbers[index];
+localStorage.setItem(
+  "basra_compound_rr",
+  (index + 1) % numbers.length
+);
+
+function goWhatsApp(){
+  setTimeout(function(){
+    const msg = encodeURIComponent("مرحبا، أرغب بالاستفسار عن بصرة كومباوند");
+    window.location.href =
+      "https://wa.me/" + selectedNumber + "?text=" + msg;
+  }, 1200);
+
+  window.location.href = "thanks.html";
+}
+</script>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">بصرة كومباوند</div>
+    <div class="subtitle">
+      فلل سكنية فاخرة بتصاميم حديثة وخدمات متكاملة
+    </div>
+
+    <button class="btn" onclick="goWhatsApp()">
+      تواصل عبر واتساب
+    </button>
+
+    <div class="footer">
+      © بصرة كومباوند
+    </div>
+  </div>
+</body>
+</html>
