@@ -1,102 +1,117 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
+<title>التواصل عبر واتساب</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بصرة كومباوند | تواصل معنا</title>
 
 <style>
-body{
-  margin:0;
-  font-family: "Tahoma", Arial;
-  background: linear-gradient(135deg,#f7f5f0,#ffffff);
-  color:#333;
-}
-.container{
-  max-width:420px;
-  margin:60px auto;
-  background:#fff;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-  padding:30px;
-  text-align:center;
-}
-.logo{
-  font-size:28px;
-  font-weight:bold;
-  color:#b89b5e;
-  margin-bottom:10px;
-}
-.subtitle{
-  font-size:15px;
-  color:#666;
-  margin-bottom:25px;
-}
-.btn{
-  display:block;
-  width:100%;
-  padding:15px;
-  font-size:18px;
-  background:#25D366;
-  color:#fff;
-  border:none;
-  border-radius:12px;
-  text-decoration:none;
-  margin-top:20px;
-  cursor:pointer;
-}
-.footer{
-  margin-top:30px;
-  font-size:12px;
-  color:#aaa;
-}
+  body {
+    font-family: Tahoma, Arial;
+    background: #f6f7f8;
+    text-align: center;
+    padding: 40px 15px;
+  }
+  .box {
+    background: #fff;
+    max-width: 420px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.1);
+  }
+  h2 {
+    color: #222;
+  }
+  p {
+    color: #555;
+    font-size: 16px;
+  }
+  #counter {
+    font-size: 22px;
+    color: #25D366;
+    margin: 15px 0;
+    font-weight: bold;
+  }
+  button {
+    margin-top: 20px;
+    font-size: 20px;
+    padding: 15px 35px;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+  }
+  button:hover {
+    background: #1ebe5d;
+  }
 </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>جاري تحويلك إلى واتساب</h2>
+  <p>سيتم فتح المحادثة تلقائيًا</p>
+  <div id="counter">3</div>
+  <p>إذا لم يتم الفتح اضغط الزر أدناه</p>
+  <button onclick="goWhatsApp()">فتح واتساب الآن</button>
+</div>
 
 <script>
-const numbers = [
-  "9647845555222",
-  "9647865555222",
-  "9647855433315",
-  "9647777082194",
-  "9647777081067"
+// ===== بيانات الموظفين =====
+const employees = [
+  { number: "9647700000001", name: "أحمد" },
+  { number: "9647700000002", name: "علي" },
+  { number: "9647700000003", name: "حسين" },
+  { number: "9647700000004", name: "محمد" }
 ];
 
-let index = localStorage.getItem("basra_compound_rr") || 0;
-index = parseInt(index);
+// ===== توزيع دائري =====
+let counter = localStorage.getItem("wa_counter");
+counter = counter ? parseInt(counter) : 0;
 
-const selectedNumber = numbers[index];
-localStorage.setItem(
-  "basra_compound_rr",
-  (index + 1) % numbers.length
+const index = counter % employees.length;
+const emp = employees[index];
+
+localStorage.setItem("wa_counter", counter + 1);
+
+// ===== رسالة خاصة لكل موظف =====
+const message = encodeURIComponent(
+  `مرحبا، تم تحويلي إليك مباشرة من إعلان المجمع السكني.`
 );
 
-function goWhatsApp(){
-  setTimeout(function(){
-    const msg = encodeURIComponent("مرحبا، أرغب بالاستفسار عن بصرة كومباوند");
-    window.location.href =
-      "https://wa.me/" + selectedNumber + "?text=" + msg;
-  }, 1200);
+// ===== تسجيل العميل (محلي) =====
+let logs = localStorage.getItem("wa_logs");
+logs = logs ? JSON.parse(logs) : [];
 
-  window.location.href = "thanks.html";
+logs.push({
+  employee: emp.name,
+  number: emp.number,
+  time: new Date().toLocaleString()
+});
+
+localStorage.setItem("wa_logs", JSON.stringify(logs));
+
+// ===== التحويل =====
+function goWhatsApp() {
+  window.location.href = `https://wa.me/${emp.number}?text=${message}`;
 }
+
+// ===== عدّاد =====
+let seconds = 3;
+const counterEl = document.getElementById("counter");
+
+const timer = setInterval(() => {
+  seconds--;
+  counterEl.textContent = seconds;
+  if (seconds === 0) {
+    clearInterval(timer);
+    goWhatsApp();
+  }
+}, 1000);
 </script>
 
-</head>
-
-<body>
-  <div class="container">
-    <div class="logo">بصرة كومباوند</div>
-    <div class="subtitle">
-      فلل سكنية فاخرة بتصاميم حديثة وخدمات متكاملة
-    </div>
-
-    <button class="btn" onclick="goWhatsApp()">
-      تواصل عبر واتساب
-    </button>
-
-    <div class="footer">
-      © بصرة كومباوند
-    </div>
-  </div>
 </body>
 </html>
